@@ -1,0 +1,16 @@
+[
+  {
+    "nombre": "Teleamazonas",
+    "url": "https://teleamazonas-live.cdn.vustreams.com/live/fd4ab346-b4e3-4628-abf0-b5a1bc192428/live.isml/playlist.m3u8",
+    "epgrId": "Teleamazonas.ec",
+    "referer": "https://www.teleamazonas.com/",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Teleamazonas_logo.png/300px-Teleamazonas_logo.png"
+  },
+  {
+    "nombre": "Ecuavisa",
+    "url": "https://jireh-4-hls-video-us-isp.dps.live/hls-video/c54ac2799874375c81c1672abb700870537c5223/ecuavisa/ecuavisa.smil/playlist.m3u8",
+    "epgrId": "Ecuavisa.ec",
+    "referer": "https://www.ecuavisa.com/",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Logo_Ecuavisa.png/300px-Logo_Ecuavisa.png"
+  }
+]
