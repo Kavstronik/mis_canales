@@ -1,16 +1,41 @@
 [
   {
     "nombre": "Teleamazonas",
-    "url": "https://teleamazonas-live.cdn.vustreams.com/live/fd4ab346-b4e3-4628-abf0-b5a1bc192428/live.isml/playlist.m3u8",
     "epgrId": "Teleamazonas.ec",
+    "url": "https://teleamazonas-live.cdn.vustreams.com/live/fd4ab346-b4e3-4628-abf0-b5a1bc192428/live.isml/playlist.m3u8",
     "referer": "https://www.teleamazonas.com/",
-    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Teleamazonas_logo.png/300px-Teleamazonas_logo.png"
+    "logoUrl": "https://i.imgur.com/0ZQpQjD.png"
   },
   {
     "nombre": "Ecuavisa",
-    "url": "https://jireh-4-hls-video-us-isp.dps.live/hls-video/c54ac2799874375c81c1672abb700870537c5223/ecuavisa/ecuavisa.smil/playlist.m3u8",
     "epgrId": "Ecuavisa.ec",
+    "url": "https://jireh-4-hls-video-us-isp.dps.live/hls-video/c54ac2799874375c81c1672abb700870537c5223/ecuavisa/ecuavisa.smil/playlist.m3u8",
     "referer": "https://www.ecuavisa.com/",
-    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Logo_Ecuavisa.png/300px-Logo_Ecuavisa.png"
+    "logoUrl": "https://i.imgur.com/6QfVYwH.png"
+  },
+  {
+    "nombre": "TC Televisión",
+    "epgrId": "TC.ec",
+    "url": "https://turisat.com.ec:8081/tctelevision/index.m3u8",
+    "referer": "https://www.tctelevision.com/",
+    "logoUrl": "https://i.imgur.com/8kzYc2B.png"
+  },
+  {
+    "nombre": "Ecuador TV",
+    "epgrId": "EcuadorTV.ec",
+    "url": "https://samson.streamerr.co:8081/shogun/index.m3u8",
+    "logoUrl": "https://i.imgur.com/3rYhZ9N.png"
+  },
+  {
+    "nombre": "RTU",
+    "epgrId": "RTU.ec",
+    "url": "https://video1.makrodigital.com/rtu/rtu/chunks.m3u8",
+    "logoUrl": "https://i.imgur.com/5tXhYwP.png"
+  },
+  {
+    "nombre": "FM Mundo",
+    "epgrId": "FMMundo.ec",
+    "url": "https://video2.makrodigital.com/fmmundo/fmmundo/playlist.m3u8",
+    "logoUrl": "https://i.imgur.com/7nKjTqL.png"
   }
 ]
