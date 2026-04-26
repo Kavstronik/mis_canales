@@ -14,11 +14,14 @@
     "logoUrl": "https://i.imgur.com/6QfVYwH.png"
   },
   {
-    "nombre": "TC Televisión",
-    "epgrId": "TC.ec",
-    "url": "https://cdndirector.dailymotion.com/cdn/live/video/x7wijay.m3u8?sec=S4CkUQ9Ee_vjfMzJdxj7DiyqJQFVvlrFSsXtTbvd0KwbGdW3qlY77C9TKg4nl2wJMW-UNOc89FFdYaPRs4PjzxYPUueBl_y6pwpPo6LaaJCuM3v41EAlXsVpPDaO0VmD&dmTs=257516&dmV1st=bba544ea-bf30-0dc1-67fb-78b8069e0d07",
-    "referer": "https://www.tctelevision.com/",
-    "logoUrl": "https://i.imgur.com/8kzYc2B.png"
+    {
+  "nombre": "TC Televisión",
+  "epgrId": "TC.ec",
+  "url": "https://cdndirector.dailymotion.com/cdn/live/video/x7wijay.m3u8?sec=S4CkUQ9Ee_vjfMzJdxj7DiyqJQFVvlrFSsXtTbvd0KwbGdW3qlY77C9TKg4nl2wJMW-UNOc89FFdYaPRs4PjzxYPUueBl_y6pwpPo6LaaJCuM3v41EAlXsVpPDaO0VmD&dmTs=257516&dmV1st=bba544ea-bf30-0dc1-67fb-78b8069e0d07",
+  "referer": "https://www.tctelevision.com/",
+  "logoUrl": "https://raw.githubusercontent.com/Kavstronik/mis_canales/main/logos/tc.png"
+}
+
   },
   {
     "nombre": "Ecuador TV",
