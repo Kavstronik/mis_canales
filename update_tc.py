@@ -1,74 +1,71 @@
 import requests
 import json
-import sys
 import re
+import sys
 
 def get_tc_link():
     video_id = "x7wijay"
-    # Esta es la URL base que sacamos de tu extensión
-    base_url = f"https://dmxleo.dailymotion.com/cdn/manifest/video/{video_id}.m3u8"
-    
-    # Parámetros que vimos en tu captura para que Dailymotion nos crea
-    params = {
-        "bs": "1",
-        "rid": "0",
-        "cookie_sync_ab_gk": "1",
-        "reader_gdpr_flag": "0",
-        "gdpr_binary_consent": "opt-out",
-        "gdpr_comes_from_infopack": "0",
-        "reader_us_privacy": "1---",
-        "eb": "https://tctelevision.com/" # El parámetro crucial
-    }
+    # URL de la página que contiene el reproductor
+    url_embed = f"https://www.dailymotion.com/embed/video/{video_id}?autoplay=1"
     
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
-        "Referer": "https://tctelevision.com/",
-        "Origin": "https://tctelevision.com"
+        "Referer": "https://www.tctelevision.com/",
+        "Origin": "https://www.tctelevision.com"
     }
 
     try:
-        print(f"📡 Intentando validar el link de extensión para {video_id}...")
+        print("📡 Iniciando rastreo de manifiesto para TC...")
+        session = requests.Session()
+        # 1. Obtenemos el código fuente del embed para buscar el 'metadata'
+        response = session.get(url_embed, headers=headers, timeout=15)
         
-        # Primero hacemos un 'head' para ver si Dailymotion nos da el OK
-        response = requests.head(base_url, params=params, headers=headers, timeout=10)
+        # Buscamos la URL del manifiesto maestro en el JSON interno de Dailymotion
+        # Buscamos patrones de URL que terminen en .m3u8
+        m3u8_links = re.findall(r'https://[^\s"\'\\]+?\.m3u8[^\s"\'\\]*', response.text)
         
-        # Si nos da un 200 o un 302, el link es válido
-        if response.status_code in [200, 302]:
-            # Construimos la URL final con los parámetros
-            query_string = "&".join([f"{k}={v}" for k, v in params.items()])
-            final_url = f"{base_url}?{query_string}"
-            print("✅ ¡Link validado y generado!")
-            return final_url
-        
-        # Plan B: Si el anterior falla, intentamos pescar el 'sec' del HTML
-        print("⚠️ Link directo rechazado, buscando token 'sec' alternativo...")
-        res_web = requests.get("https://www.tctelevision.com/envivo", headers=headers)
-        token_match = re.search(r'"sec":"([a-zA-Z0-9_-]+)"', res_web.text)
-        if token_match:
-            return f"https://cdndirector.dailymotion.com/cdn/live/video/{video_id}.m3u8?sec={token_match.group(1)}"
+        if m3u8_links:
+            # Filtramos para obtener el que parece ser el stream principal
+            # Generalmente contiene '/live/' o el ID del video
+            for link in m3u8_links:
+                if video_id in link or "/live/" in link:
+                    # Limpiamos escapes de caracteres de Python si existen
+                    final_link = link.replace("\\/", "/")
+                    print(f"✅ ¡Manifiesto capturado!: {final_link[:50]}...")
+                    return final_link
 
+        print("❌ El rastro del manifiesto se perdió en el HTML.")
+            
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f"❌ Error en la conexión de red: {e}")
     
     return None
 
-# --- Lógica de actualización del JSON ---
+# --- Lógica de actualización del archivo ---
 archivo_json = 'canales.json'
 
-nuevo_link = get_tc_link()
-if nuevo_link:
-    try:
-        with open(archivo_json, 'r', encoding='utf-8') as f:
-            canales = json.load(f)
-        for c in canales:
-            if "TC" in c.get('nombre', '').upper():
-                c['url'] = nuevo_link
-                break
+try:
+    nuevo_link = get_tc_link()
+    if not nuevo_link:
+        sys.exit(1)
+
+    with open(archivo_json, 'r', encoding='utf-8') as f:
+        canales = json.load(f)
+
+    actualizado = False
+    for c in canales:
+        if "TC" in c.get('nombre', '').upper():
+            c['url'] = nuevo_link
+            actualizado = True
+            break
+            
+    if actualizado:
         with open(archivo_json, 'w', encoding='utf-8') as f:
             json.dump(canales, f, indent=2, ensure_ascii=False)
-        print("🚀 ¡canales.json actualizado con el formato de la extensión!")
-    except Exception as e:
-        print(f"❌ Error al guardar: {e}")
-else:
-    print("❌ No se pudo generar un link válido esta vez.")
+        print("🚀 canales.json actualizado exitosamente.")
+    else:
+        print("⚠️ No se encontró la entrada de TC en el JSON.")
+
+except Exception as e:
+    print(f"❌ Fallo crítico al procesar: {e}")
     sys.exit(1)
