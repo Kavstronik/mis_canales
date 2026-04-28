@@ -4,27 +4,23 @@ import json
 import sys
 
 def get_tc_link():
+    # URL de la página donde TC tiene su reproductor
     url_web = "https://www.tctelevision.com/envivo"
     headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
     }
     
     try:
         response = requests.get(url_web, headers=headers, timeout=15)
-        # Buscamos cualquier cosa que se parezca al token sec= despues del ID de TC
-        # Esta es la forma más agresiva de buscarlo
-        match = re.search(r'x7wijay.*?sec=([a-zA-Z0-9_-]+)', response.text)
+        # Buscamos directamente la cadena que contiene el token 'sec='
+        # TC suele usar el ID x7wijay de Dailymotion
+        match = re.search(r'sec=([a-zA-Z0-9_-]+)', response.text)
         
         if match:
             token = match.group(1)
-            print(f"✅ Token encontrado: {token[:10]}...")
+            print(f"✅ Token atrapado: {token[:15]}...")
             return f"https://cdndirector.dailymotion.com/cdn/live/video/x7wijay.m3u8?sec={token}"
-        else:
-            # Plan B: Si Dailymotion cambió el formato, buscamos el link completo
-            match_alt = re.search(r'https://[^\s"]+x7wijay[^\s"]+sec=[a-zA-Z0-9_-]+', response.text)
-            if match_alt:
-                return match_alt.group(0).replace('\\', '')
-                
+            
     except Exception as e:
         print(f"❌ Error de conexión: {e}")
     return None
@@ -38,27 +34,27 @@ try:
     nuevo_link = get_tc_link()
     
     if not nuevo_link:
-        print("❌ ERROR: TC volvió a cambiar el código y el script no lo detectó.")
+        print("❌ ERROR: No se encontró el token 'sec=' en el código de la web.")
         sys.exit(1)
 
-    encontrado = False
+    actualizado = False
     for canal in lista_canales:
-        # Buscamos "TC" sin importar mayúsculas/minúsculas
+        # Buscamos "TC" en el nombre (sin importar tildes o mayúsculas)
         if "TC" in canal.get('nombre', '').upper():
-            print(f"✅ Canal '{canal['nombre']}' localizado.")
-            if canal['url'] == nuevo_link:
-                print("ℹ️ El link ya está actualizado, no hace falta cambiar nada.")
-            else:
+            if canal['url'] != nuevo_link:
                 canal['url'] = nuevo_link
-                encontrado = True
+                actualizado = True
+                print(f"✅ URL de TC actualizada en el objeto JSON.")
+            else:
+                print("ℹ️ El link en el JSON ya es el mismo que el de la web.")
             break
     
-    if encontrado:
+    if actualizado:
         with open(archivo_json, 'w', encoding='utf-8') as f:
             json.dump(lista_canales, f, indent=2, ensure_ascii=False)
-        print("🚀 ¡JSON ACTUALIZADO EXITOSAMENTE!")
+        print("🚀 ¡CAMBIO GUARDADO EN EL ARCHIVO!")
     else:
-        print("ℹ️ No hubo cambios necesarios en el JSON.")
+        print("ℹ️ No se requirieron cambios físicos en el archivo.")
 
 except Exception as e:
     print(f"❌ Fallo crítico: {e}")
