@@ -27,6 +27,6 @@ jobs:
         run: |
           git config --global user.name 'GitHub Action'
           git config --global user.email 'action@github.com'
-          git add mis_canales.json
+          git add canales.json
           git commit -m "Update TC link" || echo "No hay cambios para subir"
           git push
