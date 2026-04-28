@@ -19,7 +19,7 @@ def get_tc_link():
     return None
 
 # Abrir y leer tu JSON (formato lista directa)
-archivo_json = 'mis_canales.json' # Asegúrate que se llame así en tu repo
+archivo_json = 'canales.json' # Asegúrate que se llame así en tu repo
 with open(archivo_json, 'r', encoding='utf-8') as f:
     lista_canales = json.load(f)
 
