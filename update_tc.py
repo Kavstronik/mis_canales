@@ -7,43 +7,47 @@ def get_tc_link():
     video_id = "x7wijay"
     api_url = f"https://www.dailymotion.com/player/metadata/video/{video_id}"
     
-    # Extraemos los datos sensibles de los Secrets de GitHub para evitar bloqueos
-    cookie_master = os.getenv('TC_COOKIE')
-    user_agent_master = os.getenv('TC_USER_AGENT')
+    # Extraemos los datos de los Secrets de GitHub
+    cookie_raw = os.getenv('TC_COOKIE')
+    ua_raw = os.getenv('TC_USER_AGENT')
 
-    if not cookie_master or not user_agent_master:
-        print("❌ Error: No se encontraron los Secrets (TC_COOKIE o TC_USER_AGENT).")
+    if not cookie_raw or not ua_raw:
+        print("❌ Error: Faltan los Secrets (TC_COOKIE o TC_USER_AGENT).")
         return None
+
+    # Limpieza de espacios en blanco por seguridad
+    cookie_master = cookie_raw.strip()
+    user_agent_master = ua_raw.strip()
 
     headers = {
         "User-Agent": user_agent_master,
         "Referer": "https://geo.dailymotion.com/",
         "Origin": "https://geo.dailymotion.com",
-        "Cookie": cookie_master.strip(),
+        "Cookie": cookie_master,
         "Accept": "*/*",
         "Accept-Language": "es-EC,es;q=0.9"
     }
 
     try:
-        print("📡 Intentando bypass con identidad clonada...")
+        print("📡 Iniciando túnel de sesión con identidad clonada...")
         response = requests.get(api_url, headers=headers, timeout=15)
         
         if response.status_code == 200:
             data = response.json()
-            # Capturamos la URL del manifiesto que contiene el token 'sec=' actualizado
+            # Capturamos el manifiesto maestro (HLS)
             stream_url = data.get('qualities', {}).get('auto', [{}])[0].get('url')
             
             if stream_url:
                 print("✅ ¡SESIÓN VALIDADA! Link generado con éxito.")
                 return stream_url
         
-        print(f"⚠️ Dailymotion respondió status {response.status_code}. Es posible que la IP de GitHub esté filtrada.")
+        print(f"⚠️ Dailymotion respondió status {response.status_code}. Revisa si la Cookie expiró.")
     except Exception as e:
-        print(f"❌ Error técnico en el túnel: {e}")
+        print(f"❌ Error en la conexión: {e}")
     
     return None
 
-# --- Lógica de actualización del archivo canales.json ---
+# --- Lógica de actualización del JSON ---
 archivo_json = 'canales.json'
 nuevo_link = get_tc_link()
 
@@ -67,8 +71,8 @@ if nuevo_link:
 
         with open(archivo_json, 'w', encoding='utf-8') as f:
             json.dump(canales, f, indent=2, ensure_ascii=False)
-        print("🚀 canales.json actualizado correctamente.")
+        print("🚀 canales.json actualizado exitosamente.")
     except Exception as e:
-        print(f"❌ Fallo al escribir el JSON: {e}")
+        print(f"❌ Error al procesar el archivo: {e}")
 else:
-    sys.exit(1) # Forzamos error en el Action si no hay link
+    sys.exit(1)
