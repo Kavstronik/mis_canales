@@ -1,72 +1,58 @@
-import requests
-import re
 import json
-import sys
+import time
+import re
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
+from webdriver_manager.chrome import ChromeDriverManager
 
 def get_tc_link():
-    url_web = "https://www.tctelevision.com/envivo"
-    # User-Agent más real para evitar bloqueos
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
-        "Accept-Language": "es-ES,es;q=0.8,en-US;q=0.5,en;q=0.3",
-    }
+    chrome_options = Options()
+    chrome_options.add_argument("--headless") # No abre ventana
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
     
     try:
-        # Usamos una sesión para manejar cookies (ayuda a pasar por humano)
-        session = requests.Session()
-        response = session.get(url_web, headers=headers, timeout=20)
+        print("🌍 Abriendo TC Televisión...")
+        driver.get("https://www.tctelevision.com/envivo")
         
-        # BUSQUEDA ULTRA-AGRESIVA: 
-        # Buscamos cualquier cadena de texto que tenga 'sec=' seguida de 30 o más letras/números
-        tokens = re.findall(r'sec=([a-zA-Z0-9_-]{30,})', response.text)
+        # Esperamos 15 segundos a que el JavaScript cargue el reproductor
+        time.sleep(15)
         
-        if tokens:
-            # Si hay varios, el último suele ser el más fresco
-            token = tokens[-1]
-            print(f"✅ Token detectado: {token[:15]}...")
+        # Obtenemos el código fuente YA PROCESADO por el navegador
+        html = driver.page_source
+        
+        # Buscamos el token sec=
+        match = re.search(r'sec=([a-zA-Z0-9_-]{30,})', html)
+        if match:
+            token = match.group(1)
+            print(f"✅ Token encontrado: {token[:15]}...")
             return f"https://cdndirector.dailymotion.com/cdn/live/video/x7wijay.m3u8?sec={token}"
-        
-        # Si falla, buscamos el ID de Dailymotion x7wijay y lo que venga después
-        match_alt = re.search(r'x7wijay[^\s"\'\\?]+[?&]sec=([a-zA-Z0-9_-]+)', response.text)
-        if match_alt:
-            token = match_alt.group(1)
-            return f"https://cdndirector.dailymotion.com/cdn/live/video/x7wijay.m3u8?sec={token}"
-
+        else:
+            print("❌ No se encontró el token en el HTML renderizado.")
+            
     except Exception as e:
-        print(f"❌ Error de conexión: {e}")
+        print(f"❌ Error en Selenium: {e}")
+    finally:
+        driver.quit()
     return None
 
+# --- Lógica de actualización del JSON ---
 archivo_json = 'canales.json'
+nuevo_link = get_tc_link()
 
-try:
+if nuevo_link:
     with open(archivo_json, 'r', encoding='utf-8') as f:
-        lista_canales = json.load(f)
-
-    nuevo_link = get_tc_link()
+        canales = json.load(f)
     
-    if not nuevo_link:
-        print("❌ ERROR: TC bloqueó la petición o cambió el código. No hay token.")
-        # No salimos con error para que el Action no se vea rojo si solo es un bloqueo temporal
-        sys.exit(1)
-
-    actualizado = False
-    for canal in lista_canales:
-        if "TC" in canal.get('nombre', '').upper():
-            if canal['url'] != nuevo_link:
-                print(f"🔄 Link viejo: {canal['url'][:40]}...")
-                print(f"✨ Link nuevo: {nuevo_link[:40]}...")
-                canal['url'] = nuevo_link
-                actualizado = True
+    for c in canales:
+        if "TC" in c['nombre'].upper():
+            c['url'] = nuevo_link
+            print("🚀 Link actualizado en canales.json")
             break
-    
-    if actualizado:
-        with open(archivo_json, 'w', encoding='utf-8') as f:
-            json.dump(lista_canales, f, indent=2, ensure_ascii=False)
-        print("🚀 ¡ARCHIVO ACTUALIZADO CON ÉXITO EN EL REPOSITORIO!")
-    else:
-        print("ℹ️ El link ya era el mismo, no hizo falta escribir nada.")
-
-except Exception as e:
-    print(f"❌ Fallo crítico: {e}")
-    sys.exit(1)
+            
+    with open(archivo_json, 'w', encoding='utf-8') as f:
+        json.dump(canales, f, indent=2, ensure_ascii=False)
