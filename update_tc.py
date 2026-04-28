@@ -4,46 +4,41 @@ import sys
 
 def get_tc_link():
     video_id = "x7wijay"
-    # Paso 1: Pedir un Token de Invitado a Dailymotion
-    auth_url = "https://www.dailymotion.com/player/metadata/video/" + video_id
+    # Usamos un proxy para ocultar que la petición viene de GitHub
+    proxy_url = "https://api.allorigins.win/get?url="
+    target_url = f"https://www.dailymotion.com/player/metadata/video/{video_id}"
     
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
-        "Referer": "https://www.tctelevision.com/",
-        "Accept": "application/json"
+        "Referer": "https://www.tctelevision.com/"
     }
 
     try:
-        print(f"🔑 Solicitando pase de invitado para TC...")
-        session = requests.Session()
-        # Hacemos una petición inicial para capturar cookies de sesión
-        session.get("https://www.dailymotion.com/embed/video/" + video_id, headers=headers, timeout=10)
+        print(f"🌉 Usando puente para saltar el bloqueo de Dailymotion...")
+        # La URL se codifica para pasar por el proxy
+        full_url = f"{proxy_url}{requests.utils.quote(target_url)}"
         
-        # Paso 2: Usar la sesión para obtener los metadatos reales
-        response = session.get(auth_url, headers=headers, timeout=10)
-        data = response.json()
+        response = requests.get(full_url, headers=headers, timeout=15)
+        # AllOrigins devuelve el contenido dentro de una clave llamada 'contents'
+        data_raw = response.json().get('contents', '{}')
+        data = json.loads(data_raw)
         
-        # Buscamos la URL del stream en las diferentes calidades
-        # Dailymotion lo guarda en 'qualities' -> 'auto'
         stream_url = data.get('qualities', {}).get('auto', [{}])[0].get('url')
         
         if stream_url:
-            print("✅ ¡Pase aceptado! URL generada correctamente.")
+            print("✅ ¡LOGRADO! Link capturado a través del puente.")
             return stream_url
-        else:
-            print("❌ Dailymotion entregó datos vacíos. El bloqueo de IP persiste.")
             
     except Exception as e:
-        print(f"❌ Error técnico: {e}")
+        print(f"❌ El puente falló: {e}")
     
     return None
 
-# --- Lógica de actualización del archivo canales.json ---
+# --- Lógica de guardado ---
 archivo_json = 'canales.json'
 
 try:
     nuevo_link = get_tc_link()
-    
     if not nuevo_link:
         sys.exit(1)
 
@@ -53,12 +48,12 @@ try:
     for c in canales:
         if "TC" in c.get('nombre', '').upper():
             c['url'] = nuevo_link
-            print(f"🚀 Link actualizado en el JSON.")
+            print("🚀 JSON actualizado.")
             break
             
     with open(archivo_json, 'w', encoding='utf-8') as f:
         json.dump(canales, f, indent=2, ensure_ascii=False)
         
 except Exception as e:
-    print(f"❌ Fallo al escribir el archivo: {e}")
+    print(f"❌ Error final: {e}")
     sys.exit(1)
