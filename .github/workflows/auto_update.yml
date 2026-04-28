@@ -1,8 +1,8 @@
 name: update tc Link
 on:
   schedule:
-    - cron: '0 */3 * * *' # Corre cada 3 horas
-  workflow_dispatch:      # Para que puedas darle al botón de "Play" manualmente
+    - cron: '0 */3 * * *'
+  workflow_dispatch:
 
 jobs:
   update:
@@ -17,9 +17,10 @@ jobs:
         with:
           python-version: '3.x'
           
-      - name: Install dependencies
-        run: pip install requests
-        
+      - name: Install Selenium and Chrome
+        run: |
+          pip install requests selenium webdriver-manager
+          
       - name: Run update script
         run: python update_tc.py
         
@@ -28,5 +29,5 @@ jobs:
           git config --global user.name 'GitHub Action'
           git config --global user.email 'action@github.com'
           git add canales.json
-          git commit -m "Update TC link" || echo "No hay cambios para subir"
+          git commit -m "Update TC link via Selenium" || echo "No hay cambios"
           git push
