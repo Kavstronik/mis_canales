@@ -1,73 +1,74 @@
 import requests
 import json
-import re
 import sys
+import re
 
 def get_tc_link():
     video_id = "x7wijay"
-    # Usamos un proxy de respaldo diferente (shrtlst)
-    proxy_url = "https://api.allorigins.win/get?url="
-    target_url = f"https://www.dailymotion.com/player/metadata/video/{video_id}"
+    # Esta es la URL base que sacamos de tu extensión
+    base_url = f"https://dmxleo.dailymotion.com/cdn/manifest/video/{video_id}.m3u8"
+    
+    # Parámetros que vimos en tu captura para que Dailymotion nos crea
+    params = {
+        "bs": "1",
+        "rid": "0",
+        "cookie_sync_ab_gk": "1",
+        "reader_gdpr_flag": "0",
+        "gdpr_binary_consent": "opt-out",
+        "gdpr_comes_from_infopack": "0",
+        "reader_us_privacy": "1---",
+        "eb": "https://tctelevision.com/" # El parámetro crucial
+    }
     
     headers = {
-        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4.1 Mobile/15E148 Safari/604.1",
-        "Referer": "https://www.tctelevision.com/"
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+        "Referer": "https://tctelevision.com/",
+        "Origin": "https://tctelevision.com"
     }
 
     try:
-        print(f"🕵️ Intentando bypass para TC (ID: {video_id})...")
-        # Intentamos primero directo por si la IP de GitHub se "enfrió"
-        try:
-            res = requests.get(target_url, headers=headers, timeout=10)
-            if res.status_code == 200:
-                data = res.json()
-                url = data.get('qualities', {}).get('auto', [{}])[0].get('url')
-                if url:
-                    print("✅ ¡Link obtenido directamente!")
-                    return url
-        except:
-            pass
-
-        # Si falla, vamos por el puente
-        print("🌉 El directo falló, usando puente de emergencia...")
-        full_url = f"{proxy_url}{requests.utils.quote(target_url)}"
-        response = requests.get(full_url, timeout=15)
+        print(f"📡 Intentando validar el link de extensión para {video_id}...")
         
-        # Limpiamos la respuesta del proxy
-        content = response.json().get('contents')
-        if content:
-            data = json.loads(content)
-            url = data.get('qualities', {}).get('auto', [{}])[0].get('url')
-            if url:
-                print("✅ ¡Link obtenido por el puente!")
-                return url
+        # Primero hacemos un 'head' para ver si Dailymotion nos da el OK
+        response = requests.head(base_url, params=params, headers=headers, timeout=10)
+        
+        # Si nos da un 200 o un 302, el link es válido
+        if response.status_code in [200, 302]:
+            # Construimos la URL final con los parámetros
+            query_string = "&".join([f"{k}={v}" for k, v in params.items()])
+            final_url = f"{base_url}?{query_string}"
+            print("✅ ¡Link validado y generado!")
+            return final_url
+        
+        # Plan B: Si el anterior falla, intentamos pescar el 'sec' del HTML
+        print("⚠️ Link directo rechazado, buscando token 'sec' alternativo...")
+        res_web = requests.get("https://www.tctelevision.com/envivo", headers=headers)
+        token_match = re.search(r'"sec":"([a-zA-Z0-9_-]+)"', res_web.text)
+        if token_match:
+            return f"https://cdndirector.dailymotion.com/cdn/live/video/{video_id}.m3u8?sec={token_match.group(1)}"
 
     except Exception as e:
-        print(f"❌ Error en la infiltración: {e}")
+        print(f"❌ Error: {e}")
     
     return None
 
-# --- Lógica de actualización ---
+# --- Lógica de actualización del JSON ---
 archivo_json = 'canales.json'
 
-try:
-    nuevo_link = get_tc_link()
-    if not nuevo_link:
-        print("💀 No hubo forma. TC bloqueó todas las rutas.")
-        sys.exit(1)
-
-    with open(archivo_json, 'r', encoding='utf-8') as f:
-        canales = json.load(f)
-
-    for c in canales:
-        if "TC" in c.get('nombre', '').upper():
-            c['url'] = nuevo_link
-            print("🚀 canales.json actualizado.")
-            break
-            
-    with open(archivo_json, 'w', encoding='utf-8') as f:
-        json.dump(canales, f, indent=2, ensure_ascii=False)
-        
-except Exception as e:
-    print(f"❌ Error de escritura: {e}")
+nuevo_link = get_tc_link()
+if nuevo_link:
+    try:
+        with open(archivo_json, 'r', encoding='utf-8') as f:
+            canales = json.load(f)
+        for c in canales:
+            if "TC" in c.get('nombre', '').upper():
+                c['url'] = nuevo_link
+                break
+        with open(archivo_json, 'w', encoding='utf-8') as f:
+            json.dump(canales, f, indent=2, ensure_ascii=False)
+        print("🚀 ¡canales.json actualizado con el formato de la extensión!")
+    except Exception as e:
+        print(f"❌ Error al guardar: {e}")
+else:
+    print("❌ No se pudo generar un link válido esta vez.")
     sys.exit(1)
