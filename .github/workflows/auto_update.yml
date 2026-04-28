@@ -3,7 +3,7 @@ name: Update TC Link
 on:
   schedule:
     - cron: '0 */3 * * *' # Se ejecuta cada 3 horas
-  workflow_dispatch:      # Permite ejecutarlo manualmente
+  workflow_dispatch:      # Permite botón manual en GitHub
 
 jobs:
   build:
@@ -22,7 +22,7 @@ jobs:
 
       - name: Run update script
         env:
-          # Aquí conectamos los Secrets de GitHub con el script de Python
+          # Aquí inyectamos los Secrets que creaste en GitHub
           TC_COOKIE: ${{ secrets.TC_COOKIE }}
           TC_USER_AGENT: ${{ secrets.TC_USER_AGENT }}
         run: python update_tc.py
@@ -32,5 +32,5 @@ jobs:
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
           git add canales.json
-          git commit -m "Update TC Link with fresh token" || exit 0
+          git commit -m "Update TC Link" || exit 0
           git push
