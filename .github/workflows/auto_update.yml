@@ -1,33 +1,36 @@
-name: update tc Link
+name: Update TC Link
+
 on:
   schedule:
-    - cron: '0 */3 * * *'
-  workflow_dispatch:
+    - cron: '0 */3 * * *' # Se ejecuta cada 3 horas
+  workflow_dispatch:      # Permite ejecutarlo manualmente
 
 jobs:
-  update:
+  build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
-      - uses: actions/checkout@v4
-      
-      - name: Setup Python
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.x'
-          
-      - name: Install Selenium and Chrome
-        run: |
-          pip install requests selenium webdriver-manager
-          
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: pip install requests
+
       - name: Run update script
+        env:
+          # Aquí conectamos los Secrets de GitHub con el script de Python
+          TC_COOKIE: ${{ secrets.TC_COOKIE }}
+          TC_USER_AGENT: ${{ secrets.TC_USER_AGENT }}
         run: python update_tc.py
-        
+
       - name: Commit and push changes
         run: |
-          git config --global user.name 'GitHub Action'
-          git config --global user.email 'action@github.com'
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
           git add canales.json
-          git commit -m "Update TC link via Selenium" || echo "No hay cambios"
+          git commit -m "Update TC Link with fresh token" || exit 0
           git push
