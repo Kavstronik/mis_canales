@@ -5,6 +5,7 @@ import sys
 
 def get_tc_link():
     video_id = "x7wijay"
+    # API de metadatos de Dailymotion para obtener el link firmado
     api_url = f"https://www.dailymotion.com/player/metadata/video/{video_id}"
     
     # Extraemos la identidad real desde los Secrets de GitHub
@@ -12,7 +13,7 @@ def get_tc_link():
     user_agent_master = os.getenv('TC_USER_AGENT')
 
     if not cookie_master or not user_agent_master:
-        print("❌ Error: No se configuraron los Secrets TC_COOKIE o TC_USER_AGENT en GitHub.")
+        print("❌ Error: Faltan los Secrets TC_COOKIE o TC_USER_AGENT en GitHub.")
         return None
 
     headers = {
@@ -25,25 +26,25 @@ def get_tc_link():
     }
 
     try:
-        print("📡 Iniciando túnel de sesión con identidad clonada...")
+        print("📡 Solicitando link firmado con sesión clonada de Guayaquil...")
         response = requests.get(api_url, headers=headers, timeout=15)
         
         if response.status_code == 200:
             data = response.json()
-            # Capturamos el manifiesto maestro (HLS)
+            # El link 'auto' contiene el token sec= actualizado
             stream_url = data.get('qualities', {}).get('auto', [{}])[0].get('url')
             
             if stream_url:
-                print("✅ ¡LOGRADO! El link firmado ha sido generado.")
+                print("✅ ¡LOGRADO! Link generado correctamente.")
                 return stream_url
         
-        print(f"⚠️ Dailymotion respondió con status {response.status_code}, pero sin link. Revisa si la cookie expiró.")
+        print(f"⚠️ El servidor respondió con status {response.status_code}. Es posible que la cookie haya expirado.")
     except Exception as e:
-        print(f"❌ Fallo en la conexión: {e}")
+        print(f"❌ Fallo técnico en la conexión: {e}")
     
     return None
 
-# --- Lógica de actualización del archivo canales.json ---
+# --- Lógica para actualizar el archivo canales.json ---
 archivo_json = 'canales.json'
 nuevo_link = get_tc_link()
 
@@ -55,20 +56,22 @@ if nuevo_link:
         else:
             canales = []
 
-        actualizado = False
+        # Buscamos TC para actualizarlo, si no existe lo creamos
+        encontrado = False
         for c in canales:
             if "TC" in c.get('nombre', '').upper():
                 c['url'] = nuevo_link
-                actualizado = True
+                encontrado = True
                 break
         
-        if not actualizado:
+        if not encontrado:
             canales.append({"nombre": "TC Television", "url": nuevo_link})
 
         with open(archivo_json, 'w', encoding='utf-8') as f:
             json.dump(canales, f, indent=2, ensure_ascii=False)
-        print("🚀 canales.json actualizado exitosamente.")
+        print("🚀 canales.json actualizado con éxito.")
     except Exception as e:
-        print(f"❌ Error al procesar el archivo JSON: {e}")
+        print(f"❌ Error al escribir en el JSON: {e}")
 else:
+    # Salimos con error para que el Action se ponga rojo si falla
     sys.exit(1)
