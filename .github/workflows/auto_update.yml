@@ -1,4 +1,4 @@
-name: Update tc Link
+name: update tc Link
 on:
   schedule:
     - cron: '0 */3 * * *' # Corre cada 3 horas
