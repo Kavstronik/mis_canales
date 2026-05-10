@@ -16,7 +16,7 @@
     "logo": "https://i.imgur.com/6QfVYwH.png"
   },
   {
-    "id": "4",
+    "id": "7",
     "nombre": "Ecuador TV",
     "epgrId": "EcuadorTV.ec",
     "url": "https://samson.streamerr.co:8081/shogun/index.m3u8",
@@ -40,7 +40,7 @@
     "referer": ""
   },
   {
-    "id": "7",
+    "id": "3",
     "nombre": "Oromar TV",
     "epgrId": "OromarTV.ec",
     "url": "https://stream.oromar.tv/hls/oromartv_hi/index.m3u8",
@@ -56,8 +56,8 @@
     "logo": "https://raw.githubusercontent.com/Kavstronik/mis_canales/main/logos/tc.png"
   },
   {
-    "id": "15",
-    "nombre": "Canal Prueba (Cloudfront)",
+    "id": "4",
+    "nombre": "RTS",
     "epgrId": "En vivo",
     "url": "https://d2qsan2ut81n2k.cloudfront.net/live/72a3661e-1019-45f8-af10-af59f6ef6222/ts:abr.m3u8",
     "referer": "https://www.google.com/",
