@@ -57,7 +57,7 @@
   },
   {
     "id": "8",
-    "nombre": "Disney Junior",
+    "nombre": "Disney Junior (Claro)",
     "epgrId": "DisneyJunior.cl",
     "url": "http://tr.live.clarovtrcdn.vtrplay.com/disneyjrhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD",
     "logo": "https://i.imgur.com/8N4M08p.png",
@@ -65,7 +65,7 @@
   },
   {
     "id": "9",
-    "nombre": "Disney",
+    "nombre": "Disney Junior (Xtrim HD)",
     "epgrId": "DisneyJunior.ec",
     "url": "http://201.217.246.42:44310/Live/3fcb6e26785fd8d415571b26dc3cf5d3/local-32_720.m3u8",
     "logo": "https://i.imgur.com/8N4M08p.png",
@@ -78,5 +78,13 @@
     "url": "https://cdndirector.dailymotion.com/cdn/live/video/x7wijay.m3u8?sec=S4CkUQ9Ee_vjfMzJdxj7DiyqJQFVvlrFSsXtTbvd0KwbGdW3qlY77C9TKg4nl2wJMW-UNOc89FFdYaPRs4PjzxYPUueBl_y6pwpPo6LaaJCuM3v41EAlXsVpPDaO0VmD&dmTs=257516&dmV1st=bba544ea-bf30-0dc1-67fb-78b8069e0d07",
     "referer": "https://www.tctelevision.com/",
     "logo": "https://raw.githubusercontent.com/Kavstronik/mis_canales/main/logos/tc.png"
+  },
+  {
+    "id": "11",
+    "nombre": "History Channel (Xtrim)",
+    "epgrId": "History.ec",
+    "url": "http://201.217.246.42:44310/Live/3fcb6e26785fd8d415571b26dc3cf5d3/local-41_480.m3u8",
+    "logo": "https://i.imgur.com/Z9M59nB.png",
+    "referer": ""
   }
 ]
