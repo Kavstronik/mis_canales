@@ -1,11 +1,11 @@
 [
   {
-    "id": "5",
-    "nombre": "Teleamazonas",
-    "epgrId": "Teleamazonas.ec",
-    "url": "https://teleamazonas-live.cdn.vustreams.com/live/fd4ab346-b4e3-4628-abf0-b5a1bc192428/live.isml/playlist.m3u8",
-    "referer": "https://www.teleamazonas.com/",
-    "logoUrl": "https://i.imgur.com/0ZQpQjD.png"
+    "id": "1",
+    "nombre": "FM Mundo",
+    "epgrId": "FMMundo.ec",
+    "url": "https://video2.makrodigital.com/fmmundo/fmmundo/playlist.m3u8",
+    "logo": "https://i.imgur.com/7nKjTqL.png",
+    "referer": ""
   },
   {
     "id": "2",
@@ -13,36 +13,31 @@
     "epgrId": "Ecuavisa.ec",
     "url": "https://jireh-4-hls-video-us-isp.dps.live/hls-video/c54ac2799874375c81c1672abb700870537c5223/ecuavisa/ecuavisa.smil/playlist.m3u8",
     "referer": "https://www.ecuavisa.com/",
-    "logoUrl": "https://i.imgur.com/6QfVYwH.png"
-  },
-  {
-    "id": "10",
-    "nombre": "TC Televisión",
-    "epgrId": "TC.ec",
-    "url": "https://cdndirector.dailymotion.com/cdn/live/video/x7wijay.m3u8?sec=S4CkUQ9Ee_vjfMzJdxj7DiyqJQFVvlrFSsXtTbvd0KwbGdW3qlY77C9TKg4nl2wJMW-UNOc89FFdYaPRs4PjzxYPUueBl_y6pwpPo6LaaJCuM3v41EAlXsVpPDaO0VmD&dmTs=257516&dmV1st=bba544ea-bf30-0dc1-67fb-78b8069e0d07",
-    "referer": "https://www.tctelevision.com/",
-    "logoUrl": "https://raw.githubusercontent.com/Kavstronik/mis_canales/main/logos/tc.png"
+    "logo": "https://i.imgur.com/6QfVYwH.png"
   },
   {
     "id": "4",
     "nombre": "Ecuador TV",
     "epgrId": "EcuadorTV.ec",
     "url": "https://samson.streamerr.co:8081/shogun/index.m3u8",
-    "logoUrl": "https://i.imgur.com/3rYhZ9N.png"
+    "logo": "https://i.imgur.com/3rYhZ9N.png",
+    "referer": ""
+  },
+  {
+    "id": "5",
+    "nombre": "Teleamazonas",
+    "epgrId": "Teleamazonas.ec",
+    "url": "https://teleamazonas-live.cdn.vustreams.com/live/fd4ab346-b4e3-4628-abf0-b5a1bc192428/live.isml/playlist.m3u8",
+    "referer": "https://www.teleamazonas.com/",
+    "logo": "https://i.imgur.com/0ZQpQjD.png"
   },
   {
     "id": "6",
     "nombre": "RTU",
     "epgrId": "RTU.ec",
     "url": "https://video1.makrodigital.com/rtu/rtu/chunks.m3u8",
-    "logoUrl": "https://i.imgur.com/5tXhYwP.png"
-  },
-  {
-    "id": "1",
-    "nombre": "FM Mundo",
-    "epgrId": "FMMundo.ec",
-    "url": "https://video2.makrodigital.com/fmmundo/fmmundo/playlist.m3u8",
-    "logoUrl": "https://i.imgur.com/7nKjTqL.png"
+    "logo": "https://i.imgur.com/5tXhYwP.png",
+    "referer": ""
   },
   {
     "id": "7",
@@ -50,6 +45,22 @@
     "epgrId": "OromarTV.ec",
     "url": "https://stream.oromar.tv/hls/oromartv_hi/index.m3u8",
     "referer": "https://www.oromar.tv/",
-    "logoUrl": "https://raw.githubusercontent.com/Kavstronik/mis_canales/main/logos/oromar.png"
+    "logo": "https://raw.githubusercontent.com/Kavstronik/mis_canales/main/logos/oromar.png"
+  },
+  {
+    "id": "10",
+    "nombre": "TC Televisión",
+    "epgrId": "TC.ec",
+    "url": "https://cdndirector.dailymotion.com/cdn/live/video/x7wijay.m3u8?sec=S4CkUQ9Ee_vjfMzJdxj7DiyqJQFVvlrFSsXtTbvd0KwbGdW3qlY77C9TKg4nl2wJMW-UNOc89FFdYaPRs4PjzxYPUueBl_y6pwpPo6LaaJCuM3v41EAlXsVpPDaO0VmD&dmTs=257516&dmV1st=bba544ea-bf30-0dc1-67fb-78b8069e0d07",
+    "referer": "https://www.tctelevision.com/",
+    "logo": "https://raw.githubusercontent.com/Kavstronik/mis_canales/main/logos/tc.png"
+  },
+  {
+    "id": "15",
+    "nombre": "Canal Prueba (Cloudfront)",
+    "epgrId": "En vivo",
+    "url": "https://d2qsan2ut81n2k.cloudfront.net/live/72a3661e-1019-45f8-af10-af59f6ef6222/ts:abr.m3u8",
+    "referer": "https://www.google.com/",
+    "logo": "https://i.imgur.com/7nKjTqL.png"
   }
 ]
