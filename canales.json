@@ -16,12 +16,20 @@
     "logo": "https://i.imgur.com/6QfVYwH.png"
   },
   {
-    "id": "7",
-    "nombre": "Ecuador TV",
-    "epgrId": "EcuadorTV.ec",
-    "url": "https://samson.streamerr.co:8081/shogun/index.m3u8",
-    "logo": "https://i.imgur.com/3rYhZ9N.png",
-    "referer": ""
+    "id": "3",
+    "nombre": "Oromar TV",
+    "epgrId": "OromarTV.ec",
+    "url": "https://stream.oromar.tv/hls/oromartv_hi/index.m3u8",
+    "referer": "https://www.oromar.tv/",
+    "logo": "https://raw.githubusercontent.com/Kavstronik/mis_canales/main/logos/oromar.png"
+  },
+  {
+    "id": "4",
+    "nombre": "RTS",
+    "epgrId": "En vivo",
+    "url": "https://d2qsan2ut81n2k.cloudfront.net/live/72a3661e-1019-45f8-af10-af59f6ef6222/ts:abr.m3u8",
+    "referer": "https://www.google.com/",
+    "logo": "https://i.imgur.com/7nKjTqL.png"
   },
   {
     "id": "5",
@@ -40,12 +48,20 @@
     "referer": ""
   },
   {
-    "id": "3",
-    "nombre": "Oromar TV",
-    "epgrId": "OromarTV.ec",
-    "url": "https://stream.oromar.tv/hls/oromartv_hi/index.m3u8",
-    "referer": "https://www.oromar.tv/",
-    "logo": "https://raw.githubusercontent.com/Kavstronik/mis_canales/main/logos/oromar.png"
+    "id": "7",
+    "nombre": "Ecuador TV",
+    "epgrId": "EcuadorTV.ec",
+    "url": "https://samson.streamerr.co:8081/shogun/index.m3u8",
+    "logo": "https://i.imgur.com/3rYhZ9N.png",
+    "referer": ""
+  },
+  {
+    "id": "8",
+    "nombre": "Disney Junior",
+    "epgrId": "DisneyJunior.cl",
+    "url": "http://tr.live.clarovtrcdn.vtrplay.com/disneyjrhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD",
+    "logo": "https://i.imgur.com/8N4M08p.png",
+    "referer": ""
   },
   {
     "id": "10",
@@ -54,13 +70,5 @@
     "url": "https://cdndirector.dailymotion.com/cdn/live/video/x7wijay.m3u8?sec=S4CkUQ9Ee_vjfMzJdxj7DiyqJQFVvlrFSsXtTbvd0KwbGdW3qlY77C9TKg4nl2wJMW-UNOc89FFdYaPRs4PjzxYPUueBl_y6pwpPo6LaaJCuM3v41EAlXsVpPDaO0VmD&dmTs=257516&dmV1st=bba544ea-bf30-0dc1-67fb-78b8069e0d07",
     "referer": "https://www.tctelevision.com/",
     "logo": "https://raw.githubusercontent.com/Kavstronik/mis_canales/main/logos/tc.png"
-  },
-  {
-    "id": "4",
-    "nombre": "RTS",
-    "epgrId": "En vivo",
-    "url": "https://d2qsan2ut81n2k.cloudfront.net/live/72a3661e-1019-45f8-af10-af59f6ef6222/ts:abr.m3u8",
-    "referer": "https://www.google.com/",
-    "logo": "https://i.imgur.com/7nKjTqL.png"
   }
 ]
