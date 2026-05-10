@@ -57,9 +57,17 @@
   },
   {
     "id": "8",
-    "nombre": "Disney Junior",
+    "nombre": "Disney Junior (Claro)",
     "epgrId": "DisneyJunior.cl",
     "url": "http://tr.live.clarovtrcdn.vtrplay.com/disneyjrhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD",
+    "logo": "https://i.imgur.com/8N4M08p.png",
+    "referer": ""
+  },
+  {
+    "id": "9",
+    "nombre": "Disney Junior (Xtrim)",
+    "epgrId": "DisneyJunior.ec",
+    "url": "http://201.217.246.42:44310/Live/3fcb6e26785fd8d415571b26dc3cf5d3/local-32_720.m3u8",
     "logo": "https://i.imgur.com/8N4M08p.png",
     "referer": ""
   },
