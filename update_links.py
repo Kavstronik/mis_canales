@@ -1,28 +1,27 @@
 import requests
-import re
 import json
 
-def get_tc_link():
-    url = "https://www.tctelevision.com/en-vivo"
-    # Engañamos al servidor haciéndonos pasar por un iPhone
-    headers = {
-        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 14_7_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.2 Mobile/15E148 Safari/604.1"
-    }
+def get_tc_live_link():
+    # ID del canal en vivo de TC en Dailymotion
+    video_id = "x7wijay" 
+    api_url = f"https://www.dailymotion.com/player/metadata/video/{video_id}"
     
     try:
-        response = requests.get(url, headers=headers, timeout=15)
-        # Buscamos el link que termina en .m3u8 dentro del código de la página
-        match = re.search(r'https?://[^\s"\'<>]+?\.m3u8[^\s"\'<>]*', response.text)
+        response = requests.get(api_url, timeout=15)
+        data = response.json()
         
-        if match:
-            link = match.group(0).replace('\\/', '/')
-            return link
+        # Dailymotion entrega el m3u8 en la sección 'qualities'
+        # Buscamos la URL de 'auto' que es la que se adapta al internet
+        m3u8_url = data.get('qualities', {}).get('auto', [{}])[0].get('url')
+        
+        return m3u8_url
     except Exception as e:
-        print(f"Error: {e}")
+        print(f"Error técnico: {e}")
     return None
 
 def update_json():
-    nuevo_link = get_tc_link()
+    nuevo_link = get_tc_live_link()
+    
     if nuevo_link:
         try:
             with open('canales.json', 'r', encoding='utf-8') as f:
@@ -35,11 +34,11 @@ def update_json():
             
             with open('canales.json', 'w', encoding='utf-8') as f:
                 json.dump(canales, f, indent=2, ensure_ascii=False)
-            print("✅ Link actualizado con éxito.")
+            print(f"✅ Link capturado: {nuevo_link[:50]}...")
         except Exception as e:
-            print(f"Error al escribir JSON: {e}")
+            print(f"Error al guardar: {e}")
     else:
-        print("❌ No se encontró el link .m3u8")
+        print("❌ Dailymotion bloqueó la petición.")
 
 if __name__ == "__main__":
     update_json()
