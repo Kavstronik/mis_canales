@@ -75,7 +75,7 @@
     "id": "10",
     "nombre": "TC Televisión",
     "epgrId": "TC.ec",
-    "url": "https://www.dailymotion.com/embed/video/x7wijay?autoplay=1&mute=0",
+    "url": "https://www.dailymotion.com/embed/video/x7wijay?autoplay=1",
     "referer": "https://www.tctelevision.com/",
     "logoUrl": "https://raw.githubusercontent.com/Kavstronik/mis_canales/main/logos/tc.png",
     "categoria": "especial" 
